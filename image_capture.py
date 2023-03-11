@@ -16,7 +16,7 @@ time.sleep(1)
 
 while True:
     objectName = input("Enter object name: ")
-    if objectName = q:
+    if objectName == 'q':
         break
     else:
         i = 1
