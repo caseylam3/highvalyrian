@@ -1,4 +1,4 @@
-#import libraries 
+#import libraries  blah blah blah
 from picamera2 import Picamera2 
 import cv2 as cv 
 import numpy as np
