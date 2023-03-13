@@ -7,6 +7,7 @@ import rclpy # imports rclpy client library
 from rclpy.node import Node # imports Node class of rclpy library
 from std_msgs.msg import String # imports ROS2 built-in string message type
 from geometry_msgs.msg import Twist,Vector3
+
 from rclpy.qos import qos_profile_sensor_data
 from picamera2 import Picamera2 
 import cv2
@@ -45,6 +46,9 @@ camera = Picamera2()
 camera.set_controls({"AfMode": controls.AfModeEnum.Continuous}) #sets auto focus mode
 camera.start() #must start the camera before taking any images
 time.sleep(1)
+
+global halfway_turned
+halfway_turned = False
 
 
 def getDist():
@@ -110,6 +114,8 @@ def getNextAction():
     Lineary= 0
     Linearz= 0
     
+    turn = False
+
     if getDist() < 6:
 
         nextAction = processImage()
@@ -117,9 +123,11 @@ def getNextAction():
 
         #just testing with this
         if nextAction == class_names[4][2:]:
-            Angularz = 1.0
+            Angularz = 0.785
+            turn = True
         elif nextAction == class_names[5][2:]:
-            Angularz = -1.0
+            Angularz = -0.785
+            turn = True
             
     else:
         print("TOO FAR")
@@ -130,7 +138,7 @@ def getNextAction():
         Lineary= 0
         Linearz= 0
 
-    return[Linearx,Lineary,Linearz,Angularx,Angulary,Angularz]
+    return[Linearx,Lineary,Linearz,Angularx,Angulary,Angularz,turn]
 
 # Creates SimplePublisher class which is a subclass of Node 
 class SimplePublisher(Node):
@@ -161,7 +169,8 @@ class SimplePublisher(Node):
         # Publishes `msg` to topic 
         # x = input("Start Or Stop:")
         # if(x == 'Start'):
-        values=getNextAction()
+        values = getNextAction()
+        halfway_turned = values.pop()
 
         self.msg.linear.x = float(values[0])
         self.msg.linear.y = float(values[1])
@@ -170,9 +179,12 @@ class SimplePublisher(Node):
         self.msg.angular.y =float(values[4])
         self.msg.angular.z =float(values[5])
 
-        self.publisher_.publish(self.msg)  
-            # print(values)
-            # x = 'Stop'
+        self.publisher_.publish(self.msg) 
+        time.sleep(1)
+
+
+        if halfway_turned == True:
+            self.publisher_.publish(self.msg)
 
 class SubScriberNodes(Node):
 
