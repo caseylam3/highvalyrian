@@ -20,7 +20,7 @@ def instruction():
     if direction == "turn":
         Angularx= 0
         Angulary= 0 
-        Angularz= 1.0
+        Angularz= 10.0
         Linearx= 0
         Lineary= 0
         Linearz= 0
