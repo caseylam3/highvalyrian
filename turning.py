@@ -27,37 +27,6 @@ class PublisherNode(Node):
     def publish_velocities(self,linear_prev, angular_prev):
         twist = Twist()
 
-        # ''' This function makes a get request to the airtable API which will tell us how fast to spin the wheels'''
-
-        # ''' Put the URL for your Airtable Base here'''
-        # URL = 'https://api.airtable.com/v0/apppXetbsVhFeqCaw/Create3Info?api_key=keyPWX3FVgsAfGBdV'
-
-        # #'https://api.airtable.com/v0/' + BaseID + '/' + tableName + '?api_key=' + APIKey
-
-        # r = requests.get(url = URL, params = {})
-        # '''
-        # The get request data comes in as a json package. We will convert this json package to a python dictionary so that it can be parsed
-        # '''
-        # data = r.json()
-
-
-        # r = requests.get(url = URL, params = {})
-        # data = r.json()
-
-        # # matches linear variable to the data field
-        # linear = data['records'][1]['fields']['abs_val']
-        # linear_sign = data['records'][1]['fields']['sign']
-        # # checks if the sign is negative
-        # if linear_sign == 0:
-        #     linear = linear * -1
-
-        # # matches angular variable to the data field
-        # angular = data['records'][0]['fields']['abs_val']
-        # angular_sign = data['records'][0]['fields']['sign']
-        # # checks if the sign is negative
-        # if angular_sign == 0:
-        #     angular = angular * -1
-
         # if the value is not the same as the previous and does not have a non
         # readable value, move the robot forward or backwards the given amt
         if linear != linear_prev and linear != {'specialValue': 'NaN'}:

@@ -1,0 +1,7 @@
+0 bear
+1 elephant
+2 kiwi
+3 mario
+4 mug
+5 rubik
+6 tractor
