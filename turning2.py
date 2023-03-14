@@ -8,6 +8,7 @@ from rclpy.node import Node # imports Node class of rclpy library
 
 from std_msgs.msg import String # imports ROS2 built-in string message type
 from geometry_msgs.msg import Twist,Vector3
+from nav_msgs.msg import Odometry
 from rclpy.qos import qos_profile_sensor_data
 # import requests 
 # import json 
@@ -49,6 +50,7 @@ class SimplePublisher(Node):
         # Creates a publisher based on the message type "String" that has been imported from the std_msgs module above
         #* Works if you actaully just put cmd_vel but isnt sending to to the subscriber tho
         self.publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.subscription = self.node.create_subscription(Odometry, '/odom', self.odometry_callback, 10)
 
         # Set delay in seconds
         timer_period = 0.5  
@@ -83,9 +85,9 @@ class SubScriberNodes(Node):
 
      def __init__(self):
 
-        super().__init__('Subscriber_Node')
+        super().__init__('Odometry')
 
-        self.subscription = self.create_subscription(Twist,'/cmd_vel',self.listener_callback,10)
+        self.subscription = self.create_subscription(TwistWithCovariance,'/cmd_vel',self.listener_callback,10)
         self.subscription
     
      def listener_callback(self, msg):
